@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonInfo from "./components/PersonInfo";
 import GithubInfo from "./components/GithubInfo";
 
@@ -7,13 +7,11 @@ const GITHUB_API = "https://api.github.com/users/";
 
 function App() {
   const [username, setUserName] = useState("");
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState({});
   const [err, setErr] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [initialMsg, setInitialMsg] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchUserName = async () => {
-    setInitialMsg(false);
     setErr(false);
     setLoading(true);
 
@@ -21,19 +19,21 @@ function App() {
 
     if (response.status === 200) {
       const data = await response.json();
+      console.log("data", data);
       setErr(false);
       setUserData(data);
     } else {
       setErr(true);
+      setUserData({});
     }
     setLoading(false);
   };
 
+  console.log("userdata", userData.length);
   return (
     <div className="App">
       <input
         className="input-username"
-        value={username}
         onChange={(e) => setUserName(e.target.value.trim())}
         placeholder="Enter a username"
       />
@@ -45,17 +45,19 @@ function App() {
         Fetch User
       </button>
 
-      {!initialMsg ? (
+      {!loading ? (
         <>
           {!err ? (
             <>
-              {!loading ? (
-                <div className="user-info">
-                  <PersonInfo userData={userData} />
-                  <GithubInfo userData={userData} />
-                </div>
+              {Object.keys(userData).length ? (
+                <>
+                  <div className="user-info">
+                    <PersonInfo userData={userData} />
+                    <GithubInfo userData={userData} />
+                  </div>
+                </>
               ) : (
-                <h1>Loading</h1>
+                <h1>Search for user...</h1>
               )}
             </>
           ) : (
@@ -63,7 +65,7 @@ function App() {
           )}
         </>
       ) : (
-        <h1>Search for user</h1>
+        <h1>Loading...</h1>
       )}
     </div>
   );
