@@ -10,52 +10,61 @@ function App() {
   const [userData, setUserData] = useState("");
   const [err, setErr] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [initialMsg, setInitialMsg] = useState(true);
 
   const fetchUserName = async () => {
-    setLoading(true);
+    setInitialMsg(false);
     setErr(false);
-    if (username.length === 0) {
-      setLoading(false);
-      setErr(true);
+    setLoading(true);
+
+    const response = await fetch(GITHUB_API + username);
+
+    if (response.status === 200) {
+      const data = await response.json();
+      setErr(false);
+      setUserData(data);
     } else {
-      const response = await fetch(GITHUB_API + username);
-      if (response.status === 200) {
-        const data = await response.json();
-        setErr(false);
-        setLoading(false);
-        setUserData(data);
-      } else {
-        setErr(true);
-        setLoading(false);
-      }
+      setErr(true);
     }
+    setLoading(false);
   };
 
   return (
     <div className="App">
       <input
         className="input-username"
-        onChange={(e) => setUserName(e.target.value)}
+        value={username}
+        onChange={(e) => setUserName(e.target.value.trim())}
+        placeholder="Enter a username"
       />
-      <button className="btn-fetch" onClick={fetchUserName}>
+      <button
+        disabled={!username}
+        className="btn-fetch"
+        onClick={fetchUserName}
+      >
         Fetch User
       </button>
-      <>
-        {!err ? (
-          <>
-            {!loading ? (
-              <div className="user-info">
-                <PersonInfo userData={userData} />
-                <GithubInfo userData={userData} />
-              </div>
-            ) : (
-              <h1>Loading</h1>
-            )}
-          </>
-        ) : (
-          <h1>User not found</h1>
-        )}
-      </>
+
+      {!initialMsg ? (
+        <>
+          {!err ? (
+            <>
+              {!loading ? (
+                <div className="user-info">
+                  <PersonInfo userData={userData} />
+                  <GithubInfo userData={userData} />
+                </div>
+              ) : (
+                <h1>Loading</h1>
+              )}
+            </>
+          ) : (
+            <h1>User not found</h1>
+          )}
+        </>
+      ) : (
+        <h1>Search for user</h1>
+      )}
     </div>
   );
 }
