@@ -5,7 +5,7 @@ import { GithubInfo } from "./components/GithubInfo";
 
 const GITHUB_API = "https://api.github.com/users/";
 
-function App() {
+export const App = () => {
   const [username, setUserName] = useState("");
   const [userData, setUserData] = useState({});
   const [err, setErr] = useState(false);
@@ -19,7 +19,6 @@ function App() {
 
     if (response.status === 200) {
       const data = await response.json();
-      console.log("data", data);
       setErr(false);
       setUserData(data);
     } else {
@@ -70,6 +69,4 @@ function App() {
       )}
     </div>
   );
-}
-
-export default App;
+};
