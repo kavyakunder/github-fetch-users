@@ -1,4 +1,4 @@
-const githubInfo = {
+const GITHUBINFO = {
   "Public Repos": "public_repos",
   "Public Gists": "public_gists",
   Followers: "followers",
@@ -9,7 +9,7 @@ const GithubInfo = ({ userData }) => {
   return (
     <div className="github-info">
       <h1>Github Info</h1>
-      {Object.entries(githubInfo).map(([key, val]) => {
+      {Object.entries(GITHUBINFO).map(([key, val]) => {
         return (
           <p key={key}>
             {key} : {userData[val] ?? "-"}

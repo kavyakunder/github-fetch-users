@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PersonInfo from "./components/PersonInfo";
 import GithubInfo from "./components/GithubInfo";
 
