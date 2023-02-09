@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
-import PersonInfo from "./components/PersonInfo";
-import GithubInfo from "./components/GithubInfo";
+import { PersonInfo } from "./components/PersonInfo";
+import { GithubInfo } from "./components/GithubInfo";
 
 const GITHUB_API = "https://api.github.com/users/";
 
@@ -29,15 +29,16 @@ function App() {
     setLoading(false);
   };
 
-  console.log("userdata", userData.length);
   return (
     <div className="App">
       <input
+        data-testid="input-text"
         className="input-username"
         onChange={(e) => setUserName(e.target.value.trim())}
         placeholder="Enter a username"
       />
       <button
+        data-testid="btn-fetch"
         disabled={!username}
         className="btn-fetch"
         onClick={fetchUserName}
@@ -57,7 +58,7 @@ function App() {
                   </div>
                 </>
               ) : (
-                <h1>Search for user...</h1>
+                <h1 data-testid="search-user">Search for user...</h1>
               )}
             </>
           ) : (

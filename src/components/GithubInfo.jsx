@@ -5,7 +5,7 @@ const GITHUBINFO = {
   Following: "following",
   Type: "type",
 };
-const GithubInfo = ({ userData }) => {
+export const GithubInfo = ({ userData }) => {
   return (
     <div className="github-info">
       <h1>Github Info</h1>
@@ -19,5 +19,3 @@ const GithubInfo = ({ userData }) => {
     </div>
   );
 };
-
-export default GithubInfo;

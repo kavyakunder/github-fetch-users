@@ -6,7 +6,7 @@ const PERSONINFO = {
   Location: "location",
 };
 
-const PersonInfo = ({ userData }) => {
+export const PersonInfo = ({ userData }) => {
   return (
     <div className="personal-info">
       <h1>Personal Info</h1>
@@ -20,5 +20,3 @@ const PersonInfo = ({ userData }) => {
     </div>
   );
 };
-
-export default PersonInfo;
