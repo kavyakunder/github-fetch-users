@@ -1,7 +1,6 @@
-import { fireEvent, screen, render, act } from "@testing-library/react";
+import { fireEvent, screen, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import { App } from "./App";
-import { GithubInfo } from "./components/GithubInfo";
-import { PersonInfo } from "./components/PersonInfo";
 import { fetchUserData } from "./hook/UseFetch";
 
 jest.mock("./components/GithubInfo", () => ({
@@ -30,7 +29,7 @@ describe("App component render", () => {
     expect(btnFetch).toBeInTheDocument();
   });
 
-  it.only("should display user data", async () => {
+  it("should display user data", async () => {
     await render(<App />);
     const inputElement = screen.getByTestId(/input-text/i);
     const btnFetch = screen.getByTestId(/btn-fetch/i);

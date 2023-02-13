@@ -10,7 +10,7 @@ const userData = {
 };
 
 describe("Person component render", () => {
-  it.only("renders person info", () => {
+  it("renders person info", () => {
     render(<PersonInfo userData={userData} />);
     const personalHeading = screen.getByTestId(/personal-heading/i);
     const name = screen.getByTestId("Name");

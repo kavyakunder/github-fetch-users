@@ -16,7 +16,6 @@ export const App = () => {
 
     try {
       const response = await fetchUserData(username);
-      console.log("response", response);
       if (response.status === 200) {
         const data = await response.json();
         setErr(false);
