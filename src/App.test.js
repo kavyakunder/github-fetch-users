@@ -1,8 +1,67 @@
-import { render, screen } from "@testing-library/react";
-import App from "./App";
+import { fireEvent, screen, render, act } from "@testing-library/react";
+import { App } from "./App";
+import { GithubInfo } from "./components/GithubInfo";
+import { PersonInfo } from "./components/PersonInfo";
+import { fetchUserData } from "./hook/UseFetch";
 
-test("renders learn react link", () => {
-  render(<App />);
-  const linkElement = screen.getByText(/fetch user/i);
-  expect(linkElement).toBeInTheDocument();
+jest.mock("./components/GithubInfo", () => ({
+  GithubInfo: jest.fn().mockImplementation(() => <div>GithubInfo</div>),
+}));
+
+jest.mock("./components/PersonInfo", () => ({
+  PersonInfo: jest.fn().mockImplementation(() => <div>PersonInfo</div>),
+}));
+
+jest.mock("./hook/UseFetch", () => ({
+  fetchUserData: jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      json: () => Promise.resolve({ rates: { CAD: 1.42 } }),
+    })
+  ),
+}));
+
+describe("App component render", () => {
+  it("renders learn react link", () => {
+    render(<App />);
+    const inputElement = screen.getByTestId(/input-text/i);
+    const btnFetch = screen.getByTestId(/btn-fetch/i);
+
+    expect(inputElement).toBeInTheDocument();
+    expect(btnFetch).toBeInTheDocument();
+  });
+
+  it.only("should display user data", async () => {
+    await render(<App />);
+    const inputElement = screen.getByTestId(/input-text/i);
+    const btnFetch = screen.getByTestId(/btn-fetch/i);
+    const searchUser = screen.getByTestId("search-user");
+
+    expect(inputElement).toBeInTheDocument();
+    expect(btnFetch).toBeInTheDocument();
+    expect(searchUser).toBeInTheDocument();
+    expect(btnFetch).toBeDisabled();
+
+    fireEvent.change(inputElement, { target: { value: "abc" } });
+    expect(screen.getByRole("button")).not.toBeDisabled();
+    await act(() => {
+      fireEvent.click(btnFetch);
+    });
+    expect(fetchUserData).toHaveBeenCalled();
+  });
+
+  it("should show error message", async () => {
+    fetchUserData().mockRejectedValue(new Error("Not found!"));
+
+    render(<App />);
+    const inputElement = screen.getByTestId(/input-text/i);
+    const btnFetch = screen.getByTestId(/btn-fetch/i);
+
+    fireEvent.change(inputElement, { target: { value: "abc" } });
+    await act(() => {
+      fireEvent.click(btnFetch);
+    });
+
+    const errorMessage = screen.getByTestId("not-found");
+    expect(errorMessage).toBeInTheDocument();
+  });
 });

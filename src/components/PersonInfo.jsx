@@ -9,10 +9,10 @@ const PERSONINFO = {
 export const PersonInfo = ({ userData }) => {
   return (
     <div className="personal-info">
-      <h1>Personal Info</h1>
+      <h1 data-testid="personal-heading">Personal Info</h1>
       {Object.entries(PERSONINFO).map(([key, val]) => {
         return (
-          <p key={key}>
+          <p data-testid={key} key={key}>
             {key} : {userData[val] ?? "-"}
           </p>
         );
