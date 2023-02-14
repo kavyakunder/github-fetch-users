@@ -1,5 +1,4 @@
-import { fireEvent, screen, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { fireEvent, screen, render, act } from "@testing-library/react";
 import { App } from "./App";
 import { fetchUserData } from "./hook/UseFetch";
 
