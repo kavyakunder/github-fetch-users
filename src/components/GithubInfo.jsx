@@ -8,10 +8,10 @@ const GITHUBINFO = {
 export const GithubInfo = ({ userData }) => {
   return (
     <div className="github-info">
-      <h1>Github Info</h1>
+      <h1 data-testid="github-heading">Github Info</h1>
       {Object.entries(GITHUBINFO).map(([key, val]) => {
         return (
-          <p key={key}>
+          <p key={key} data-testid={key}>
             {key} : {userData[val] ?? "-"}
           </p>
         );

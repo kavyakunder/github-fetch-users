@@ -2,8 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { PersonInfo } from "./components/PersonInfo";
 import { GithubInfo } from "./components/GithubInfo";
-
-const GITHUB_API = "https://api.github.com/users/";
+import { fetchUserData } from "./hook/UseFetch";
 
 export const App = () => {
   const [username, setUserName] = useState("");
@@ -15,13 +14,14 @@ export const App = () => {
     setErr(false);
     setLoading(true);
 
-    const response = await fetch(GITHUB_API + username);
-
-    if (response.status === 200) {
-      const data = await response.json();
-      setErr(false);
-      setUserData(data);
-    } else {
+    try {
+      const response = await fetchUserData(username);
+      if (response.status === 200) {
+        const data = await response.json();
+        setErr(false);
+        setUserData(data);
+      }
+    } catch (error) {
       setErr(true);
       setUserData({});
     }
@@ -44,7 +44,6 @@ export const App = () => {
       >
         Fetch User
       </button>
-
       {!loading ? (
         <>
           {!err ? (
@@ -61,11 +60,11 @@ export const App = () => {
               )}
             </>
           ) : (
-            <h1>User not found</h1>
+            <h1 data-testid="not-found">User not found</h1>
           )}
         </>
       ) : (
-        <h1>Loading...</h1>
+        <h1 data-testid="loading">Loading...</h1>
       )}
     </div>
   );
